@@ -1,0 +1,20 @@
+{
+  "homepage-hero-wide": {
+    "path": "/homepage-hero/wide",
+    "targetUrl": "https://holidayextras.imgix.net/web/homepage/placeholder-wide.jpg",
+    "description": "Homepage hero image — desktop/wide",
+    "group": "homepage-hero",
+    "updatedBy": "system",
+    "updatedAt": "2026-05-19T00:00:00Z",
+    "history": []
+  },
+  "homepage-hero-narrow": {
+    "path": "/homepage-hero/narrow",
+    "targetUrl": "https://holidayextras.imgix.net/web/homepage/placeholder-narrow.jpg",
+    "description": "Homepage hero image — mobile/narrow",
+    "group": "homepage-hero",
+    "updatedBy": "system",
+    "updatedAt": "2026-05-19T00:00:00Z",
+    "history": []
+  }
+}
