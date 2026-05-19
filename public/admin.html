@@ -53,6 +53,9 @@
 
   .toast { position: fixed; bottom: 20px; right: 20px; background: #16a34a; color: #fff; padding: 10px 18px; border-radius: 8px; font-size: 14px; z-index: 200; opacity: 0; transition: opacity .3s; pointer-events: none; }
   .toast.show { opacity: 1; }
+  .btn-copy { background: #e5e7eb; border: none; border-radius: 4px; padding: 2px 8px; font-size: 11px; font-weight: 500; color: #374151; cursor: pointer; vertical-align: middle; margin-left: 6px; }
+  .btn-copy:hover { background: #d1d5db; }
+  .btn-copy.copied { background: #16a34a; color: #fff; }
   .empty { text-align: center; padding: 40px; color: #9ca3af; }
   .hidden { display: none !important; }
 </style>
@@ -137,7 +140,7 @@ function renderCard(item) {
     <div class="card" id="card-${item.id}">
       <div class="card-row">
         <div class="card-info">
-          <div class="card-path">${esc(item.path)}</div>
+          <div class="card-path">${esc(item.path)} <button class="btn-copy" onclick="copyUrl('${esc(item.path)}')" title="Copy public URL">Copy URL</button></div>
           <div class="card-target">${esc(item.targetUrl)}</div>
           <div class="card-meta">${esc(item.description)} &middot; ${ago} by ${esc(item.updatedBy)}</div>
           ${previewUrl ? `<img class="card-preview" src="${esc(previewUrl)}" alt="preview" onerror="this.style.display='none'">` : ''}
@@ -164,6 +167,16 @@ function renderCard(item) {
         `).join('') : '<div style="font-size:12px;color:#9ca3af">No previous versions.</div>'}
       </div>
     </div>`;
+}
+
+function copyUrl(path) {
+  const full = location.origin + BASE + path;
+  navigator.clipboard.writeText(full).then(() => {
+    const btn = event.target;
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy URL'; btn.classList.remove('copied'); }, 1500);
+  });
 }
 
 function toggleHistory(id) {
