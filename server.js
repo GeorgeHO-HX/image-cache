@@ -3,8 +3,10 @@ const path = require('path');
 const store = require('./lib/store');
 
 const app = express();
+const router = express.Router();
 const PORT = process.env.PORT || 3000;
 const ADMIN_TOKEN = process.env.ADMIN_TOKEN || 'dev-token';
+const BASE_PATH = process.env.BASE_PATH || '';
 
 app.set('trust proxy', 1);
 app.use(express.json());
@@ -17,27 +19,27 @@ function requireAuth(req, res, next) {
   next();
 }
 
-app.get('/health', (_req, res) => {
+router.get('/health', (_req, res) => {
   res.json({ status: 'ok', time: new Date().toISOString() });
 });
 
-app.get('/admin', requireAuth, (_req, res) => {
+router.get('/admin', requireAuth, (_req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'admin.html'));
 });
 
 // ── Admin API ──────────────────────────────────────────────
 
-app.get('/api/redirects', requireAuth, async (_req, res) => {
+router.get('/api/redirects', requireAuth, async (_req, res) => {
   res.json(await store.getAll());
 });
 
-app.get('/api/redirects/:id', requireAuth, async (req, res) => {
+router.get('/api/redirects/:id', requireAuth, async (req, res) => {
   const r = await store.get(req.params.id);
   if (!r) return res.status(404).json({ error: 'Not found' });
   res.json(r);
 });
 
-app.post('/api/redirects', requireAuth, async (req, res) => {
+router.post('/api/redirects', requireAuth, async (req, res) => {
   const { id, path: rPath, targetUrl, description, group } = req.body;
   if (!id || !rPath || !targetUrl) {
     return res.status(400).json({ error: 'id, path, and targetUrl are required' });
@@ -50,7 +52,7 @@ app.post('/api/redirects', requireAuth, async (req, res) => {
   res.status(201).json(r);
 });
 
-app.put('/api/redirects/:id', requireAuth, async (req, res) => {
+router.put('/api/redirects/:id', requireAuth, async (req, res) => {
   const { targetUrl, description, note } = req.body;
   const user = req.body.user || req.query.user || 'admin';
   const r = await store.update(req.params.id, { targetUrl, description, note, updatedBy: user });
@@ -58,21 +60,21 @@ app.put('/api/redirects/:id', requireAuth, async (req, res) => {
   res.json(r);
 });
 
-app.post('/api/redirects/:id/rollback/:index', requireAuth, async (req, res) => {
+router.post('/api/redirects/:id/rollback/:index', requireAuth, async (req, res) => {
   const user = req.body.user || req.query.user || 'admin';
   const r = await store.rollback(req.params.id, parseInt(req.params.index, 10), user);
   if (!r) return res.status(404).json({ error: 'Not found or invalid history index' });
   res.json(r);
 });
 
-app.delete('/api/redirects/:id', requireAuth, async (req, res) => {
+router.delete('/api/redirects/:id', requireAuth, async (req, res) => {
   await store.remove(req.params.id);
   res.status(204).end();
 });
 
 // ── Public: manifest ───────────────────────────────────────
 
-app.get('/manifest.json', async (_req, res) => {
+router.get('/manifest.json', async (_req, res) => {
   const all = await store.getAll();
   const manifest = {};
   for (const [id, r] of Object.entries(all)) {
@@ -90,7 +92,7 @@ app.get('/manifest.json', async (_req, res) => {
 
 // ── Public: redirects (catch-all) ──────────────────────────
 
-app.get('*', async (req, res) => {
+router.get('*', async (req, res) => {
   const r = await store.getByPath(req.path);
   if (!r) return res.status(404).json({ error: 'Not found' });
 
@@ -98,10 +100,12 @@ app.get('*', async (req, res) => {
   res.redirect(302, r.targetUrl);
 });
 
+app.use(BASE_PATH, router);
+
 // ── Start ──────────────────────────────────────────────────
 
 store.init().then(() => {
   app.listen(PORT, () => {
-    console.log(`Image cache running on :${PORT}`);
+    console.log(`Image cache running on :${PORT} (base: ${BASE_PATH || '/'})`);
   });
 });

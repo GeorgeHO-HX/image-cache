@@ -82,7 +82,8 @@
 <script>
 const params = new URLSearchParams(location.search);
 const TOKEN = params.get('token') || '';
-const API = '/api/redirects';
+const BASE = location.pathname.replace(/\/admin$/, '');
+const API = BASE + '/api/redirects';
 
 function headers() {
   return { 'Content-Type': 'application/json', 'X-Admin-Token': TOKEN };
