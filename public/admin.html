@@ -3,67 +3,96 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Image Cache Admin</title>
+<title>Image Cache — Holiday Extras</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
+  :root {
+    --hx-purple: #542E91;
+    --hx-purple-light: #6b3fb3;
+    --hx-purple-dark: #3d2069;
+    --hx-yellow: #FDDC06;
+    --hx-yellow-light: #fff3a0;
+    --hx-white: #FFFFFF;
+    --hx-offwhite: #F0F0F0;
+    --hx-black: #232323;
+    --hx-blue: #3AA6FF;
+    --hx-green: #00B0A6;
+    --hx-orange: #FFB55F;
+    --hx-red: #FF5F68;
+  }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f5f5; color: #222; line-height: 1.5; }
-  .container { max-width: 960px; margin: 0 auto; padding: 20px; }
-  header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
-  header h1 { font-size: 22px; font-weight: 600; }
-  .user-bar { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #666; }
-  .user-bar input { border: 1px solid #ccc; border-radius: 4px; padding: 4px 8px; font-size: 13px; width: 220px; }
-  .btn { display: inline-flex; align-items: center; gap: 4px; padding: 6px 14px; border: none; border-radius: 6px; font-size: 13px; font-weight: 500; cursor: pointer; transition: background .15s; }
-  .btn-primary { background: #2563eb; color: #fff; }
-  .btn-primary:hover { background: #1d4ed8; }
-  .btn-sm { padding: 4px 10px; font-size: 12px; }
-  .btn-outline { background: transparent; border: 1px solid #d1d5db; color: #374151; }
-  .btn-outline:hover { background: #f3f4f6; }
-  .btn-danger { background: #ef4444; color: #fff; }
-  .btn-danger:hover { background: #dc2626; }
-  .btn-green { background: #16a34a; color: #fff; }
-  .btn-green:hover { background: #15803d; }
+  body { font-family: 'Nunito', sans-serif; background: var(--hx-offwhite); color: var(--hx-black); line-height: 1.6; }
 
-  .group-heading { font-size: 14px; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: .5px; margin: 24px 0 8px; }
-  .card { background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; margin-bottom: 12px; }
+  .top-bar { background: var(--hx-purple); padding: 16px 0; }
+  .top-bar .container { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+  .top-bar h1 { font-size: 20px; font-weight: 800; color: var(--hx-white); letter-spacing: -0.3px; }
+  .top-bar h1 span { color: var(--hx-yellow); }
+  .top-bar .user-bar { display: flex; align-items: center; gap: 8px; font-size: 13px; color: rgba(255,255,255,.7); }
+  .top-bar .user-bar input { border: 1px solid rgba(255,255,255,.25); background: rgba(255,255,255,.1); border-radius: 6px; padding: 5px 10px; font-size: 13px; font-family: 'Nunito', sans-serif; width: 230px; color: #fff; }
+  .top-bar .user-bar input::placeholder { color: rgba(255,255,255,.4); }
+
+  .container { max-width: 960px; margin: 0 auto; padding: 0 20px; }
+  .content { padding: 24px 0 40px; }
+
+  .btn { display: inline-flex; align-items: center; gap: 4px; padding: 7px 16px; border: none; border-radius: 6px; font-size: 13px; font-weight: 700; font-family: 'Nunito', sans-serif; cursor: pointer; transition: all .15s; }
+  .btn-primary { background: var(--hx-yellow); color: var(--hx-purple); }
+  .btn-primary:hover { background: #ffe94a; }
+  .btn-sm { padding: 4px 10px; font-size: 12px; }
+  .btn-outline { background: var(--hx-white); border: 1px solid #d1d5db; color: var(--hx-black); }
+  .btn-outline:hover { background: var(--hx-offwhite); border-color: var(--hx-purple); color: var(--hx-purple); }
+  .btn-danger { background: var(--hx-red); color: #fff; }
+  .btn-danger:hover { background: #e84e57; }
+  .btn-green { background: var(--hx-green); color: #fff; }
+  .btn-green:hover { background: #009e95; }
+  .btn-purple { background: var(--hx-purple); color: #fff; }
+  .btn-purple:hover { background: var(--hx-purple-light); }
+
+  .group-heading { font-size: 12px; font-weight: 800; color: var(--hx-purple); text-transform: uppercase; letter-spacing: 1px; margin: 28px 0 10px; padding-left: 2px; }
+  .card { background: var(--hx-white); border: 1px solid #e0dde5; border-radius: 10px; padding: 18px; margin-bottom: 12px; border-left: 4px solid var(--hx-purple); transition: box-shadow .15s; }
+  .card:hover { box-shadow: 0 2px 12px rgba(84,46,145,.08); }
   .card-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; }
   .card-info { flex: 1; min-width: 0; }
-  .card-path { font-weight: 600; font-size: 15px; color: #111; word-break: break-all; }
-  .card-target { font-size: 13px; color: #2563eb; word-break: break-all; margin-top: 2px; }
-  .card-meta { font-size: 12px; color: #9ca3af; margin-top: 4px; }
+  .card-path { font-weight: 700; font-size: 15px; color: var(--hx-purple); word-break: break-all; }
+  .card-target { font-size: 13px; color: var(--hx-blue); word-break: break-all; margin-top: 3px; }
+  .card-meta { font-size: 12px; color: #888; margin-top: 5px; }
   .card-actions { display: flex; gap: 6px; flex-shrink: 0; }
-  .card-preview { width: 120px; height: 68px; object-fit: cover; border-radius: 4px; border: 1px solid #e5e7eb; margin-top: 8px; background: #f9fafb; }
+  .card-preview { width: 120px; height: 68px; object-fit: cover; border-radius: 6px; border: 1px solid #e0dde5; margin-top: 8px; background: var(--hx-offwhite); }
 
-  .history { margin-top: 12px; border-top: 1px solid #e5e7eb; padding-top: 12px; }
-  .history h4 { font-size: 13px; font-weight: 600; margin-bottom: 8px; }
-  .history-item { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; padding: 6px 0; border-bottom: 1px solid #f3f4f6; font-size: 12px; }
+  .btn-copy { background: var(--hx-yellow); border: none; border-radius: 4px; padding: 2px 8px; font-size: 11px; font-weight: 700; font-family: 'Nunito', sans-serif; color: var(--hx-purple); cursor: pointer; vertical-align: middle; margin-left: 6px; }
+  .btn-copy:hover { background: #ffe94a; }
+  .btn-copy.copied { background: var(--hx-green); color: #fff; }
+
+  .history { margin-top: 14px; border-top: 2px solid var(--hx-offwhite); padding-top: 12px; }
+  .history h4 { font-size: 13px; font-weight: 700; margin-bottom: 8px; color: var(--hx-purple); }
+  .history-item { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--hx-offwhite); font-size: 12px; }
   .history-item:last-child { border-bottom: none; }
-  .history-url { color: #6b7280; word-break: break-all; flex: 1; }
-  .history-meta { color: #9ca3af; white-space: nowrap; }
-  .history-note { color: #9ca3af; font-style: italic; }
+  .history-url { color: #666; word-break: break-all; flex: 1; }
+  .history-meta { color: #999; white-space: nowrap; }
+  .history-note { color: var(--hx-orange); font-style: italic; font-weight: 600; }
 
-  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.4); display: flex; align-items: center; justify-content: center; z-index: 100; }
-  .modal { background: #fff; border-radius: 12px; padding: 24px; width: 90%; max-width: 560px; max-height: 90vh; overflow-y: auto; }
-  .modal h2 { font-size: 18px; margin-bottom: 16px; }
+  .modal-overlay { position: fixed; inset: 0; background: rgba(35,35,35,.5); display: flex; align-items: center; justify-content: center; z-index: 100; }
+  .modal { background: var(--hx-white); border-radius: 14px; padding: 28px; width: 90%; max-width: 560px; max-height: 90vh; overflow-y: auto; border-top: 4px solid var(--hx-purple); }
+  .modal h2 { font-size: 18px; font-weight: 800; margin-bottom: 18px; color: var(--hx-purple); }
   .form-group { margin-bottom: 14px; }
-  .form-group label { display: block; font-size: 13px; font-weight: 500; margin-bottom: 4px; }
-  .form-group input, .form-group textarea { width: 100%; border: 1px solid #d1d5db; border-radius: 6px; padding: 8px 10px; font-size: 14px; font-family: inherit; }
+  .form-group label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 4px; color: var(--hx-black); }
+  .form-group input, .form-group textarea { width: 100%; border: 2px solid #e0dde5; border-radius: 8px; padding: 9px 12px; font-size: 14px; font-family: 'Nunito', sans-serif; transition: border-color .15s; }
+  .form-group input:focus, .form-group textarea:focus { outline: none; border-color: var(--hx-purple); }
   .form-group textarea { resize: vertical; min-height: 60px; }
-  .form-group small { color: #9ca3af; font-size: 12px; }
-  .form-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 18px; }
+  .form-group small { color: #999; font-size: 12px; }
+  .form-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 20px; }
 
-  .toast { position: fixed; bottom: 20px; right: 20px; background: #16a34a; color: #fff; padding: 10px 18px; border-radius: 8px; font-size: 14px; z-index: 200; opacity: 0; transition: opacity .3s; pointer-events: none; }
+  .toast { position: fixed; bottom: 20px; right: 20px; background: var(--hx-green); color: #fff; padding: 12px 20px; border-radius: 8px; font-size: 14px; font-weight: 700; font-family: 'Nunito', sans-serif; z-index: 200; opacity: 0; transition: opacity .3s; pointer-events: none; }
   .toast.show { opacity: 1; }
-  .btn-copy { background: #e5e7eb; border: none; border-radius: 4px; padding: 2px 8px; font-size: 11px; font-weight: 500; color: #374151; cursor: pointer; vertical-align: middle; margin-left: 6px; }
-  .btn-copy:hover { background: #d1d5db; }
-  .btn-copy.copied { background: #16a34a; color: #fff; }
-  .empty { text-align: center; padding: 40px; color: #9ca3af; }
+  .empty { text-align: center; padding: 60px 20px; color: #999; font-size: 15px; }
   .hidden { display: none !important; }
 </style>
 </head>
 <body>
-<div class="container">
-  <header>
-    <h1>Image Cache Admin</h1>
+<div class="top-bar">
+  <div class="container">
+    <h1>Image Cache <span>Admin</span></h1>
     <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
       <div class="user-bar">
         <span>Editing as:</span>
@@ -71,7 +100,9 @@
       </div>
       <button class="btn btn-primary" onclick="showCreateModal()">+ New Redirect</button>
     </div>
-  </header>
+  </div>
+</div>
+<div class="container content">
   <div id="list"></div>
   <div class="empty hidden" id="empty">No redirects configured yet.</div>
 </div>
@@ -164,7 +195,7 @@ function renderCard(item) {
               <button class="btn btn-sm btn-green" onclick="rollback('${item.id}', ${i})">Rollback</button>
             </div>
           </div>
-        `).join('') : '<div style="font-size:12px;color:#9ca3af">No previous versions.</div>'}
+        `).join('') : '<div style="font-size:12px;color:#999">No previous versions.</div>'}
       </div>
     </div>`;
 }
@@ -211,7 +242,7 @@ function showCreateModal() {
       </div>
       <div class="form-actions">
         <button type="button" class="btn btn-outline" onclick="closeModal()">Cancel</button>
-        <button type="submit" class="btn btn-primary">Create</button>
+        <button type="submit" class="btn btn-purple">Create</button>
       </div>
     </form>`;
   document.getElementById('modal').classList.remove('hidden');
@@ -236,7 +267,7 @@ function showEditModal(id) {
         </div>
         <div class="form-actions">
           <button type="button" class="btn btn-outline" onclick="closeModal()">Cancel</button>
-          <button type="submit" class="btn btn-primary">Save</button>
+          <button type="submit" class="btn btn-purple">Save</button>
         </div>
       </form>`;
     document.getElementById('modal').classList.remove('hidden');
