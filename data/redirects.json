@@ -16,5 +16,149 @@
     "updatedBy": "system",
     "updatedAt": "2026-05-19T00:00:00Z",
     "history": []
+  },
+  "parking-desktop": {
+    "path": "/banner/parking/desktop",
+    "targetUrl": "https://holidayextras.imgix.net/web/banners/parking-desktop-placeholder.jpg",
+    "description": "[CIA] Parking — desktop banner",
+    "group": "campaign-image-agent",
+    "updatedBy": "campaign-image-agent",
+    "updatedAt": "2026-05-26T00:00:00Z",
+    "history": []
+  },
+  "parking-mobile": {
+    "path": "/banner/parking/mobile",
+    "targetUrl": "https://holidayextras.imgix.net/web/banners/parking-mobile-placeholder.jpg",
+    "description": "[CIA] Parking — mobile banner",
+    "group": "campaign-image-agent",
+    "updatedBy": "campaign-image-agent",
+    "updatedAt": "2026-05-26T00:00:00Z",
+    "history": []
+  },
+  "hotels-desktop": {
+    "path": "/banner/hotels/desktop",
+    "targetUrl": "https://holidayextras.imgix.net/web/banners/hotels-desktop-placeholder.jpg",
+    "description": "[CIA] Hotels — desktop banner",
+    "group": "campaign-image-agent",
+    "updatedBy": "campaign-image-agent",
+    "updatedAt": "2026-05-26T00:00:00Z",
+    "history": []
+  },
+  "hotels-mobile": {
+    "path": "/banner/hotels/mobile",
+    "targetUrl": "https://holidayextras.imgix.net/web/banners/hotels-mobile-placeholder.jpg",
+    "description": "[CIA] Hotels — mobile banner",
+    "group": "campaign-image-agent",
+    "updatedBy": "campaign-image-agent",
+    "updatedAt": "2026-05-26T00:00:00Z",
+    "history": []
+  },
+  "hotel-and-parking-desktop": {
+    "path": "/banner/hotel-and-parking/desktop",
+    "targetUrl": "https://holidayextras.imgix.net/web/banners/hotel-and-parking-desktop-placeholder.jpg",
+    "description": "[CIA] Hotel & Parking — desktop banner",
+    "group": "campaign-image-agent",
+    "updatedBy": "campaign-image-agent",
+    "updatedAt": "2026-05-26T00:00:00Z",
+    "history": []
+  },
+  "hotel-and-parking-mobile": {
+    "path": "/banner/hotel-and-parking/mobile",
+    "targetUrl": "https://holidayextras.imgix.net/web/banners/hotel-and-parking-mobile-placeholder.jpg",
+    "description": "[CIA] Hotel & Parking — mobile banner",
+    "group": "campaign-image-agent",
+    "updatedBy": "campaign-image-agent",
+    "updatedAt": "2026-05-26T00:00:00Z",
+    "history": []
+  },
+  "insurance-desktop": {
+    "path": "/banner/insurance/desktop",
+    "targetUrl": "https://holidayextras.imgix.net/web/banners/insurance-desktop-placeholder.jpg",
+    "description": "[CIA] Insurance — desktop banner",
+    "group": "campaign-image-agent",
+    "updatedBy": "campaign-image-agent",
+    "updatedAt": "2026-05-26T00:00:00Z",
+    "history": []
+  },
+  "insurance-mobile": {
+    "path": "/banner/insurance/mobile",
+    "targetUrl": "https://holidayextras.imgix.net/web/banners/insurance-mobile-placeholder.jpg",
+    "description": "[CIA] Insurance — mobile banner",
+    "group": "campaign-image-agent",
+    "updatedBy": "campaign-image-agent",
+    "updatedAt": "2026-05-26T00:00:00Z",
+    "history": []
+  },
+  "car-hire-desktop": {
+    "path": "/banner/car-hire/desktop",
+    "targetUrl": "https://holidayextras.imgix.net/web/banners/car-hire-desktop-placeholder.jpg",
+    "description": "[CIA] Car Hire — desktop banner",
+    "group": "campaign-image-agent",
+    "updatedBy": "campaign-image-agent",
+    "updatedAt": "2026-05-26T00:00:00Z",
+    "history": []
+  },
+  "car-hire-mobile": {
+    "path": "/banner/car-hire/mobile",
+    "targetUrl": "https://holidayextras.imgix.net/web/banners/car-hire-mobile-placeholder.jpg",
+    "description": "[CIA] Car Hire — mobile banner",
+    "group": "campaign-image-agent",
+    "updatedBy": "campaign-image-agent",
+    "updatedAt": "2026-05-26T00:00:00Z",
+    "history": []
+  },
+  "transfers-desktop": {
+    "path": "/banner/transfers/desktop",
+    "targetUrl": "https://holidayextras.imgix.net/web/banners/transfers-desktop-placeholder.jpg",
+    "description": "[CIA] Transfers — desktop banner",
+    "group": "campaign-image-agent",
+    "updatedBy": "campaign-image-agent",
+    "updatedAt": "2026-05-26T00:00:00Z",
+    "history": []
+  },
+  "transfers-mobile": {
+    "path": "/banner/transfers/mobile",
+    "targetUrl": "https://holidayextras.imgix.net/web/banners/transfers-mobile-placeholder.jpg",
+    "description": "[CIA] Transfers — mobile banner",
+    "group": "campaign-image-agent",
+    "updatedBy": "campaign-image-agent",
+    "updatedAt": "2026-05-26T00:00:00Z",
+    "history": []
+  },
+  "lounge-desktop": {
+    "path": "/banner/lounge/desktop",
+    "targetUrl": "https://holidayextras.imgix.net/web/banners/lounge-desktop-placeholder.jpg",
+    "description": "[CIA] Lounge — desktop banner",
+    "group": "campaign-image-agent",
+    "updatedBy": "campaign-image-agent",
+    "updatedAt": "2026-05-26T00:00:00Z",
+    "history": []
+  },
+  "lounge-mobile": {
+    "path": "/banner/lounge/mobile",
+    "targetUrl": "https://holidayextras.imgix.net/web/banners/lounge-mobile-placeholder.jpg",
+    "description": "[CIA] Lounge — mobile banner",
+    "group": "campaign-image-agent",
+    "updatedBy": "campaign-image-agent",
+    "updatedAt": "2026-05-26T00:00:00Z",
+    "history": []
+  },
+  "port-parking-desktop": {
+    "path": "/banner/port-parking/desktop",
+    "targetUrl": "https://holidayextras.imgix.net/web/banners/port-parking-desktop-placeholder.jpg",
+    "description": "[CIA] Port Parking — desktop banner",
+    "group": "campaign-image-agent",
+    "updatedBy": "campaign-image-agent",
+    "updatedAt": "2026-05-26T00:00:00Z",
+    "history": []
+  },
+  "port-parking-mobile": {
+    "path": "/banner/port-parking/mobile",
+    "targetUrl": "https://holidayextras.imgix.net/web/banners/port-parking-mobile-placeholder.jpg",
+    "description": "[CIA] Port Parking — mobile banner",
+    "group": "campaign-image-agent",
+    "updatedBy": "campaign-image-agent",
+    "updatedAt": "2026-05-26T00:00:00Z",
+    "history": []
   }
 }

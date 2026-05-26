@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Campaign Image Agent — Holiday Extras</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --hx-purple: #542E91;
+    --hx-purple-light: #6b3fb3;
+    --hx-purple-dark: #3d2069;
+    --hx-yellow: #FDDC06;
+    --hx-yellow-light: #fff9c4;
+    --hx-white: #FFFFFF;
+    --hx-offwhite: #F0F0F0;
+    --hx-black: #232323;
+    --hx-blue: #3AA6FF;
+    --hx-green: #00B0A6;
+    --hx-orange: #FFB55F;
+    --hx-red: #FF5F68;
+    --cia-bg: #1a0a33;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Nunito', sans-serif; background: var(--hx-offwhite); color: var(--hx-black); line-height: 1.5; }
+
+  /* ── Top bar ── */
+  .top-bar { background: var(--cia-bg); padding: 16px 0; border-bottom: 3px solid var(--hx-yellow); }
+  .top-bar .container { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+  .top-bar .brand { display: flex; align-items: center; gap: 12px; }
+  .cia-icon { width: 36px; height: 36px; background: var(--hx-yellow); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+  .top-bar h1 { font-size: 18px; font-weight: 800; color: var(--hx-white); }
+  .top-bar h1 span { color: var(--hx-yellow); }
+  .top-bar .subtitle { font-size: 12px; color: rgba(255,255,255,.5); font-weight: 600; letter-spacing: .5px; text-transform: uppercase; }
+  .top-bar .actions { display: flex; align-items: center; gap: 10px; }
+
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+  .content { padding: 24px 0 48px; }
+
+  /* ── Buttons ── */
+  .btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 18px; border: none; border-radius: 6px; font-size: 13px; font-weight: 700; font-family: 'Nunito', sans-serif; cursor: pointer; transition: all .15s; }
+  .btn-yellow { background: var(--hx-yellow); color: var(--hx-purple); }
+  .btn-yellow:hover { background: #ffe94a; }
+  .btn-yellow:disabled { opacity: .5; cursor: not-allowed; }
+  .btn-outline { background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2); color: #fff; font-size: 12px; padding: 6px 14px; }
+  .btn-outline:hover { background: rgba(255,255,255,.2); }
+
+  /* ── Status strip ── */
+  .status-strip { background: var(--hx-purple-dark); border-radius: 10px; padding: 16px 20px; display: flex; flex-wrap: wrap; gap: 24px; margin-bottom: 24px; }
+  .stat { display: flex; flex-direction: column; gap: 2px; }
+  .stat-label { font-size: 11px; font-weight: 700; color: rgba(255,255,255,.5); text-transform: uppercase; letter-spacing: .8px; }
+  .stat-value { font-size: 15px; font-weight: 800; color: #fff; }
+  .stat-value.ok { color: var(--hx-green); }
+  .stat-value.error { color: var(--hx-red); }
+  .stat-value.warn { color: var(--hx-yellow); }
+  .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; }
+  .dot.green { background: var(--hx-green); box-shadow: 0 0 6px var(--hx-green); }
+  .dot.red { background: var(--hx-red); }
+  .dot.yellow { background: var(--hx-yellow); }
+
+  /* ── Section headings ── */
+  .section-heading { font-size: 12px; font-weight: 800; color: var(--hx-purple); text-transform: uppercase; letter-spacing: 1px; margin: 28px 0 12px; }
+
+  /* ── Product grid ── */
+  .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 14px; }
+  .product-card { background: var(--hx-white); border: 1px solid #e0dde5; border-radius: 10px; overflow: hidden; border-top: 3px solid var(--hx-yellow); }
+  .product-card-header { padding: 12px 16px 10px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--hx-offwhite); }
+  .product-name { font-size: 14px; font-weight: 800; color: var(--hx-purple); }
+  .cia-badge { background: var(--hx-yellow); color: var(--hx-purple); font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 4px; letter-spacing: .5px; }
+  .device-rows { padding: 0; }
+  .device-row { display: flex; align-items: center; gap: 10px; padding: 10px 16px; border-bottom: 1px solid var(--hx-offwhite); }
+  .device-row:last-child { border-bottom: none; }
+  .device-icon { font-size: 16px; width: 22px; text-align: center; flex-shrink: 0; }
+  .device-info { flex: 1; min-width: 0; }
+  .device-label { font-size: 11px; font-weight: 700; color: #999; text-transform: uppercase; letter-spacing: .5px; }
+  .device-url { font-size: 11px; color: var(--hx-blue); word-break: break-all; margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .device-campaign { font-size: 11px; color: #666; margin-top: 2px; font-style: italic; }
+  .device-thumb { width: 56px; height: 32px; object-fit: cover; border-radius: 4px; border: 1px solid #e0dde5; background: var(--hx-offwhite); flex-shrink: 0; }
+  .device-thumb-placeholder { width: 56px; height: 32px; border-radius: 4px; border: 1px dashed #ccc; background: var(--hx-offwhite); flex-shrink: 0; }
+
+  /* ── Upcoming ── */
+  .upcoming-list { display: flex; flex-direction: column; gap: 8px; }
+  .upcoming-card { background: var(--hx-white); border: 1px solid #e0dde5; border-radius: 8px; padding: 12px 16px; border-left: 4px solid var(--hx-orange); display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .upcoming-time { font-size: 13px; font-weight: 800; color: var(--hx-orange); white-space: nowrap; }
+  .upcoming-detail { flex: 1; min-width: 0; }
+  .upcoming-name { font-size: 13px; font-weight: 700; color: var(--hx-black); }
+  .upcoming-meta { font-size: 12px; color: #888; margin-top: 2px; }
+  .empty-state { text-align: center; padding: 20px; color: #aaa; font-size: 13px; background: var(--hx-white); border: 1px dashed #ddd; border-radius: 8px; }
+
+  /* ── Activity log ── */
+  .log-wrap { background: #1a0a33; border-radius: 10px; padding: 16px; max-height: 360px; overflow-y: auto; font-family: 'Courier New', monospace; }
+  .log-entry { display: flex; gap: 10px; padding: 3px 0; font-size: 12px; border-bottom: 1px solid rgba(255,255,255,.04); }
+  .log-entry:last-child { border-bottom: none; }
+  .log-time { color: rgba(255,255,255,.35); white-space: nowrap; flex-shrink: 0; }
+  .log-level { width: 52px; flex-shrink: 0; font-weight: 700; }
+  .log-level.info    { color: rgba(255,255,255,.6); }
+  .log-level.success { color: #00B0A6; }
+  .log-level.warn    { color: #FDDC06; }
+  .log-level.error   { color: #FF5F68; }
+  .log-msg { color: rgba(255,255,255,.8); flex: 1; word-break: break-word; }
+
+  /* ── Misc ── */
+  .toast { position: fixed; bottom: 20px; right: 20px; background: var(--hx-green); color: #fff; padding: 12px 20px; border-radius: 8px; font-size: 14px; font-weight: 700; font-family: 'Nunito', sans-serif; z-index: 200; opacity: 0; transition: opacity .3s; pointer-events: none; }
+  .toast.show { opacity: 1; }
+  .refresh-note { font-size: 11px; color: rgba(255,255,255,.4); }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 700px) { .two-col { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div class="container">
+    <div class="brand">
+      <div class="cia-icon">&#x1F916;</div>
+      <div>
+        <h1>Campaign <span>Image Agent</span></h1>
+        <div class="subtitle">Automated banner management</div>
+      </div>
+    </div>
+    <div class="actions">
+      <span class="refresh-note" id="refreshNote"></span>
+      <button class="btn btn-outline" onclick="load()">&#x21BB; Refresh</button>
+      <button class="btn btn-yellow" id="syncBtn" onclick="triggerSync()">&#9654; Sync Now</button>
+    </div>
+  </div>
+</div>
+
+<div class="container content">
+
+  <!-- Status strip -->
+  <div class="status-strip" id="statusStrip">
+    <div class="stat">
+      <div class="stat-label">Status</div>
+      <div class="stat-value" id="statRunning">—</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Connection</div>
+      <div class="stat-value" id="statConfigured">—</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Last sync</div>
+      <div class="stat-value" id="statLastSync">—</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Last result</div>
+      <div class="stat-value" id="statLastStatus">—</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Next sync</div>
+      <div class="stat-value" id="statNextSync">—</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Syncs run</div>
+      <div class="stat-value" id="statSyncCount">—</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Total updates</div>
+      <div class="stat-value" id="statUpdateCount">—</div>
+    </div>
+  </div>
+
+  <!-- Product banners -->
+  <div class="section-heading">Managed product banners</div>
+  <div class="product-grid" id="productGrid"></div>
+
+  <div class="two-col" style="margin-top:28px">
+    <!-- Upcoming -->
+    <div>
+      <div class="section-heading">Upcoming campaigns (next 48h)</div>
+      <div class="upcoming-list" id="upcomingList"></div>
+    </div>
+
+    <!-- Activity log -->
+    <div>
+      <div class="section-heading">Activity log</div>
+      <div class="log-wrap" id="logWrap"></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const params = new URLSearchParams(location.search);
+const TOKEN = params.get('token') || '';
+const BASE = location.pathname.replace(/\/campaign-agent$/, '');
+
+function headers() {
+  return { 'Content-Type': 'application/json', 'X-Admin-Token': TOKEN };
+}
+
+const PRODUCT_LABELS = {
+  parking: 'Parking',
+  hotels: 'Hotels',
+  hotel_and_parking: 'Hotel & Parking',
+  insurance: 'Insurance',
+  car_hire: 'Car Hire',
+  transfers: 'Transfers',
+  lounge: 'Lounge',
+  port_parking: 'Port Parking',
+};
+
+let autoRefreshTimer = null;
+
+async function load() {
+  try {
+    const res = await fetch(BASE + '/api/agent/status', { headers: headers() });
+    if (!res.ok) { showToast('Failed to load status: ' + res.status, true); return; }
+    const data = await res.json();
+    render(data);
+    scheduleAutoRefresh(data.syncIntervalMs || 60000);
+  } catch (e) {
+    showToast('Error: ' + e.message, true);
+  }
+}
+
+async function triggerSync() {
+  const btn = document.getElementById('syncBtn');
+  btn.disabled = true;
+  btn.textContent = '⟳ Syncing…';
+  try {
+    const res = await fetch(BASE + '/api/agent/sync', { method: 'POST', headers: headers() });
+    if (!res.ok) { showToast('Sync failed: ' + res.status, true); return; }
+    const data = await res.json();
+    render(data);
+    showToast('Sync complete');
+  } catch (e) {
+    showToast('Sync error: ' + e.message, true);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '▶ Sync Now';
+  }
+}
+
+function render(data) {
+  renderStatus(data);
+  renderProductGrid(data);
+  renderUpcoming(data.upcomingCampaigns || []);
+  renderLog(data.log || []);
+}
+
+function renderStatus(data) {
+  const running = data.running;
+  const configured = data.configured;
+
+  el('statRunning').innerHTML = running
+    ? '<span class="dot green"></span>Running'
+    : '<span class="dot red"></span>Stopped';
+  el('statRunning').className = 'stat-value ' + (running ? 'ok' : 'error');
+
+  el('statConfigured').innerHTML = configured
+    ? '<span class="dot green"></span>Pick connected'
+    : '<span class="dot yellow"></span>No secret set';
+  el('statConfigured').className = 'stat-value ' + (configured ? 'ok' : 'warn');
+
+  el('statLastSync').textContent = data.lastSync ? timeAgo(data.lastSync) : 'Never';
+  el('statLastStatus').textContent = data.lastSyncStatus || '—';
+  el('statLastStatus').className = 'stat-value ' + (data.lastSyncStatus === 'ok' ? 'ok' : data.lastSyncStatus === 'error' ? 'error' : '');
+  el('statNextSync').textContent = data.nextSync ? timeUntil(data.nextSync) : '—';
+  el('statSyncCount').textContent = data.syncCount ?? '—';
+  el('statUpdateCount').textContent = data.updateCount ?? '—';
+}
+
+function renderProductGrid(data) {
+  const managed = data.managed || {};
+  const productMap = data.productMap || {};
+  const grid = el('productGrid');
+
+  if (!Object.keys(productMap).length) {
+    grid.innerHTML = '<div class="empty-state">No product map configured.</div>';
+    return;
+  }
+
+  grid.innerHTML = Object.entries(productMap).map(([product, devices]) => {
+    const label = PRODUCT_LABELS[product] || product;
+    const desktopEntry = managed[devices.desktop] || {};
+    const mobileEntry = managed[devices.mobile] || {};
+
+    return `
+      <div class="product-card">
+        <div class="product-card-header">
+          <span class="product-name">${esc(label)}</span>
+          <span class="cia-badge">CIA</span>
+        </div>
+        <div class="device-rows">
+          ${deviceRow('🖥', 'Desktop', devices.desktop, desktopEntry)}
+          ${deviceRow('📱', 'Mobile', devices.mobile, mobileEntry)}
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function deviceRow(icon, label, id, entry) {
+  const url = entry.targetUrl || '';
+  const campaign = entry.description ? entry.description.replace(/^\[CIA\]\s*/, '') : 'No active campaign';
+  const ago = entry.updatedAt ? timeAgo(entry.updatedAt) : '—';
+  const isImage = url.match(/\.(jpg|jpeg|png|avif|webp|gif)/i);
+  const thumbUrl = isImage ? url + (url.includes('?') ? '&' : '?') + 'w=112&h=64&fit=crop' : '';
+
+  return `
+    <div class="device-row">
+      <div class="device-icon">${icon}</div>
+      <div class="device-info">
+        <div class="device-label">${label} <span style="color:#bbb;font-weight:400;font-size:10px">${esc(id)}</span></div>
+        <div class="device-url" title="${esc(url)}">${esc(url) || '—'}</div>
+        <div class="device-campaign">${esc(campaign)} · ${ago}</div>
+      </div>
+      ${thumbUrl
+        ? `<img class="device-thumb" src="${esc(thumbUrl)}" alt="preview" onerror="this.style.display='none'">`
+        : `<div class="device-thumb-placeholder"></div>`}
+    </div>`;
+}
+
+function renderUpcoming(campaigns) {
+  const wrap = el('upcomingList');
+  if (!campaigns.length) {
+    wrap.innerHTML = '<div class="empty-state">No campaigns scheduled in the next 48 hours.</div>';
+    return;
+  }
+  wrap.innerHTML = campaigns.map(c => `
+    <div class="upcoming-card">
+      <div class="upcoming-time">${c.startsAt ? fmtDate(c.startsAt) : '—'}</div>
+      <div class="upcoming-detail">
+        <div class="upcoming-name">${esc(c.campaignName || 'Untitled campaign')}</div>
+        <div class="upcoming-meta">${esc(PRODUCT_LABELS[c.product] || c.product)} · ${esc(c.device)} · ${esc(c.outcome || '—')}</div>
+      </div>
+    </div>`).join('');
+}
+
+function renderLog(log) {
+  const wrap = el('logWrap');
+  if (!log.length) {
+    wrap.innerHTML = '<div style="color:rgba(255,255,255,.3);font-size:12px;font-family:monospace">No activity yet.</div>';
+    return;
+  }
+  wrap.innerHTML = log.map(entry => `
+    <div class="log-entry">
+      <span class="log-time">${fmtTime(entry.time)}</span>
+      <span class="log-level ${entry.level}">${entry.level.toUpperCase()}</span>
+      <span class="log-msg">${esc(entry.message)}${entry.detail ? ' <span style="opacity:.5">· ' + esc(entry.detail.campaign || '') + (entry.detail.device ? ' ' + entry.detail.device : '') + '</span>' : ''}</span>
+    </div>`).join('');
+}
+
+function scheduleAutoRefresh(intervalMs) {
+  clearTimeout(autoRefreshTimer);
+  const refreshIn = Math.max(15000, Math.min(intervalMs, 60000));
+  autoRefreshTimer = setTimeout(load, refreshIn);
+  el('refreshNote').textContent = `Auto-refresh in ${Math.round(refreshIn / 1000)}s`;
+}
+
+// ── Helpers ───────────────────────────────────────────────────
+
+function el(id) { return document.getElementById(id); }
+
+function esc(s) {
+  if (!s) return '';
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+function timeAgo(iso) {
+  if (!iso) return '—';
+  const diff = Date.now() - new Date(iso).getTime();
+  const mins = Math.floor(diff / 60000);
+  if (mins < 1) return 'just now';
+  if (mins < 60) return mins + 'm ago';
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return hrs + 'h ago';
+  return Math.floor(hrs / 24) + 'd ago';
+}
+
+function timeUntil(iso) {
+  if (!iso) return '—';
+  const diff = new Date(iso).getTime() - Date.now();
+  if (diff <= 0) return 'now';
+  const secs = Math.floor(diff / 1000);
+  if (secs < 60) return secs + 's';
+  return Math.floor(secs / 60) + 'm ' + (secs % 60) + 's';
+}
+
+function fmtDate(iso) {
+  if (!iso) return '—';
+  return new Date(iso).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+}
+
+function fmtTime(iso) {
+  if (!iso) return '';
+  return new Date(iso).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+}
+
+function showToast(msg, isError) {
+  const t = el('toast');
+  t.textContent = msg;
+  t.style.background = isError ? '#FF5F68' : '#00B0A6';
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+load();
+</script>
+</body>
+</html>

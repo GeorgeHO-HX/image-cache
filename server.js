@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const store = require('./lib/store');
+const agent = require('./lib/agent');
 
 const app = express();
 const router = express.Router();
@@ -25,6 +26,34 @@ router.get('/health', (_req, res) => {
 
 router.get('/admin', requireAuth, (_req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'admin.html'));
+});
+
+// ── Campaign Image Agent (URL-only, not linked from admin) ──
+
+router.get('/campaign-agent', requireAuth, (_req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'campaign-agent.html'));
+});
+
+router.get('/api/agent/status', requireAuth, async (_req, res) => {
+  res.json(await agent.getState());
+});
+
+router.post('/api/agent/sync', requireAuth, async (_req, res) => {
+  await agent.sync();
+  res.json(await agent.getState());
+});
+
+// Called by Vercel Cron every minute — uses CRON_SECRET, no admin token needed
+router.post('/api/agent/cron-sync', async (req, res) => {
+  const cronSecret = process.env.CRON_SECRET;
+  if (cronSecret) {
+    const auth = req.headers.authorization;
+    if (auth !== `Bearer ${cronSecret}`) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+  }
+  await agent.sync();
+  res.json({ ok: true, time: new Date().toISOString() });
 });
 
 // ── Admin API ──────────────────────────────────────────────
@@ -105,6 +134,7 @@ app.use(BASE_PATH, router);
 // ── Start ──────────────────────────────────────────────────
 
 store.init().then(() => {
+  agent.start();
   app.listen(PORT, () => {
     console.log(`Image cache running on :${PORT} (base: ${BASE_PATH || '/'})`);
   });

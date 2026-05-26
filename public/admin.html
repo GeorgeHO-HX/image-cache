@@ -52,6 +52,9 @@
   .group-heading { font-size: 12px; font-weight: 800; color: var(--hx-purple); text-transform: uppercase; letter-spacing: 1px; margin: 28px 0 10px; padding-left: 2px; }
   .card { background: var(--hx-white); border: 1px solid #e0dde5; border-radius: 10px; padding: 18px; margin-bottom: 12px; border-left: 4px solid var(--hx-purple); transition: box-shadow .15s; }
   .card:hover { box-shadow: 0 2px 12px rgba(84,46,145,.08); }
+  .card.cia-managed { border-left-color: var(--hx-yellow); background: #fffef5; }
+  .badge-cia { display: inline-flex; align-items: center; gap: 4px; background: var(--hx-yellow); color: var(--hx-purple); font-size: 10px; font-weight: 800; padding: 2px 8px; border-radius: 4px; letter-spacing: .4px; vertical-align: middle; margin-left: 8px; }
+  .cia-lock { font-size: 10px; color: #888; margin-top: 4px; font-style: italic; }
   .card-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; }
   .card-info { flex: 1; min-width: 0; }
   .card-path { font-weight: 700; font-size: 15px; color: var(--hx-purple); word-break: break-all; }
@@ -164,16 +167,22 @@ function render(data) {
 
 function renderCard(item) {
   const ago = timeAgo(item.updatedAt);
+  const isCIA = item.group === 'campaign-image-agent' || item.updatedBy === 'campaign-image-agent';
   const previewUrl = item.targetUrl.match(/\.(jpg|jpeg|png|avif|webp|gif)/i)
     ? item.targetUrl + (item.targetUrl.includes('?') ? '&' : '?') + 'w=240&h=136&fit=crop'
     : '';
   return `
-    <div class="card" id="card-${item.id}">
+    <div class="card${isCIA ? ' cia-managed' : ''}" id="card-${item.id}">
       <div class="card-row">
         <div class="card-info">
-          <div class="card-path">${esc(item.path)} <button class="btn-copy" onclick="copyUrl('${esc(item.path)}')" title="Copy public URL">Copy URL</button></div>
+          <div class="card-path">
+            ${esc(item.path)}
+            <button class="btn-copy" onclick="copyUrl('${esc(item.path)}')" title="Copy public URL">Copy URL</button>
+            ${isCIA ? '<span class="badge-cia">&#x1F916; Campaign Agent</span>' : ''}
+          </div>
           <div class="card-target">${esc(item.targetUrl)}</div>
           <div class="card-meta">${esc(item.description)} &middot; ${ago} by ${esc(item.updatedBy)}</div>
+          ${isCIA ? '<div class="cia-lock">Automatically managed by Campaign Image Agent — manual edits will be overwritten on next sync</div>' : ''}
           ${previewUrl ? `<img class="card-preview" src="${esc(previewUrl)}" alt="preview" onerror="this.style.display='none'">` : ''}
         </div>
         <div class="card-actions">
