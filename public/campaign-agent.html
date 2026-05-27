@@ -386,7 +386,7 @@ function renderUpcoming(campaigns) {
   for (const c of campaigns) {
     const key = `${c.campaignName}||${c.startsAt}`;
     if (!groups[key]) {
-      groups[key] = { campaignName: c.campaignName, startsAt: c.startsAt, products: new Set(), outcomes: {} };
+      groups[key] = { campaignName: c.campaignName, startsAt: c.startsAt, scheduledAt: c.scheduledAt || null, products: new Set(), outcomes: {} };
     }
     // products may be an array (new format) or a single string (legacy)
     const productList = Array.isArray(c.products) ? c.products : (c.product ? [c.product] : []);
@@ -422,7 +422,7 @@ function renderUpcoming(campaigns) {
     return `
       <div class="upcoming-card">
         <div class="upcoming-card-header">
-          <div class="upcoming-time">${g.startsAt ? fmtDate(g.startsAt) : '—'}</div>
+          <div class="upcoming-time">${g.scheduledAt ? fmtDate(g.scheduledAt) : g.startsAt ? fmtDate(g.startsAt) : '—'}</div>
           <div class="upcoming-detail">
             <div class="upcoming-name">${esc(g.campaignName || 'Untitled')}</div>
             <div class="upcoming-products">${esc(productLabels)}</div>
