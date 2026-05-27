@@ -91,6 +91,8 @@
   .live-preview-label { justify-content: space-between; }
   .btn-edit { background: none; border: 1px solid #ddd; border-radius: 4px; padding: 2px 8px; font-size: 10px; font-weight: 700; font-family: 'Nunito', sans-serif; color: var(--hx-purple); cursor: pointer; }
   .btn-edit:hover { background: var(--hx-offwhite); border-color: var(--hx-purple); }
+  .badge-armed { background: var(--hx-orange); color: #fff; font-size: 9px; font-weight: 800; padding: 1px 5px; border-radius: 3px; letter-spacing: .3px; }
+  .armed-note { font-size: 10px; color: var(--hx-orange); font-weight: 700; margin-top: 4px; }
 
   /* ── Upcoming ── */
   .upcoming-list { display: flex; flex-direction: column; gap: 12px; }
@@ -347,7 +349,10 @@ function renderProductGrid(data) {
 
 function livePreviewPanel(icon, label, id, entry) {
   const url = entry.targetUrl || '';
-  const outcome = (entry.description || '').replace(/^\[CIA\]\s*/, '').split(' — ')[1] || '';
+  const descBody = (entry.description || '').replace(/^\[CIA\]\s*/, '');
+  const outcomePart = descBody.split(' — ')[1] || '';
+  const isArmed = outcomePart.includes('(armed)');
+  const outcomeLabel = outcomePart.replace(' (armed)', '');
   const ago = entry.updatedAt ? timeAgo(entry.updatedAt) : '—';
   const imgSrc = imgixThumb(url, 480, 270);
   const safeId = esc(id);
@@ -356,7 +361,7 @@ function livePreviewPanel(icon, label, id, entry) {
   return `
     <div class="live-preview">
       <div class="live-preview-label">
-        <span>${icon} ${label} <span class="live-badge">LIVE</span></span>
+        <span>${icon} ${label} ${isArmed ? '<span class="badge-armed">ARMED</span>' : '<span class="live-badge">LIVE</span>'}</span>
         <button class="btn-edit" onclick="openEditModal('${safeId}', '${safeUrl}', '${esc(label)}')">Edit</button>
       </div>
       <div class="live-img-wrap">
@@ -364,7 +369,8 @@ function livePreviewPanel(icon, label, id, entry) {
           ? `<img src="${esc(imgSrc)}" alt="${esc(label)} live banner" onerror="this.parentElement.innerHTML='<div class=live-img-placeholder><span>🖼</span>No image</div>'">`
           : `<div class="live-img-placeholder"><span>🖼</span>No image yet</div>`}
       </div>
-      <div class="live-meta">${outcome ? `<strong>${esc(outcome)}</strong> · ` : ''}${ago}</div>
+      <div class="live-meta">${outcomeLabel ? `<strong>${esc(outcomeLabel)}</strong> · ` : ''}${ago}</div>
+      ${isArmed ? `<div class="armed-note">Pre-loaded — outcome triggers at scheduled time</div>` : ''}
       <div class="live-url" title="${esc(url)}">${esc(url) || '—'}</div>
     </div>`;
 }
