@@ -422,7 +422,7 @@ function renderUpcoming(campaigns) {
     return `
       <div class="upcoming-card">
         <div class="upcoming-card-header">
-          <div class="upcoming-time">${g.scheduledAt ? fmtDate(g.scheduledAt) : g.startsAt ? fmtDate(g.startsAt) : '—'}</div>
+          <div class="upcoming-time"><div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;opacity:.7;margin-bottom:2px">Outcome triggers</div>${g.scheduledAt ? fmtDate(g.scheduledAt) : g.startsAt ? fmtDate(g.startsAt) : '—'}</div>
           <div class="upcoming-detail">
             <div class="upcoming-name">${esc(g.campaignName || 'Untitled')}</div>
             <div class="upcoming-products">${esc(productLabels)}</div>
