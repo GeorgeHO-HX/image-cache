@@ -351,13 +351,17 @@ function livePreviewPanel(icon, label, id, entry) {
 }
 
 function renderOutcomeStrip(productOutcomes) {
+  if (productOutcomes === null) {
+    return `<div class="outcomes-pending">No active campaign — outcomes will appear here when one goes live.</div>`;
+  }
+
   if (!productOutcomes) {
     return `<div class="outcomes-pending">Awaiting outcome data from Pick — add <code>/api/agent/outcome-previews</code> to enable this.</div>`;
   }
 
   const outcomes = productOutcomes.outcomes || [];
   if (!outcomes.length) {
-    return `<div class="outcomes-pending">No outcomes found for this campaign.</div>`;
+    return `<div class="outcomes-pending">No outcomes configured for this campaign.</div>`;
   }
 
   return `<div class="outcomes-strip">` +
