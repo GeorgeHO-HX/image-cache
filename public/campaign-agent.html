@@ -388,13 +388,13 @@ function renderUpcoming(campaigns) {
     if (!groups[key]) {
       groups[key] = { campaignName: c.campaignName, startsAt: c.startsAt, products: new Set(), outcomes: {} };
     }
-    groups[key].products.add(c.product);
-    // Collect unique outcomes with their image (desktop preferred)
+    // products may be an array (new format) or a single string (legacy)
+    const productList = Array.isArray(c.products) ? c.products : (c.product ? [c.product] : []);
+    productList.forEach(p => groups[key].products.add(p));
+    // Collect unique outcomes — new format has one entry per outcome already
     const oKey = c.outcome || 'fallback';
     if (!groups[key].outcomes[oKey]) {
-      groups[key].outcomes[oKey] = { label: c.outcome, imageUrl: c.device === 'desktop' ? c.imageUrl : null };
-    } else if (c.device === 'desktop' && c.imageUrl) {
-      groups[key].outcomes[oKey].imageUrl = c.imageUrl;
+      groups[key].outcomes[oKey] = { label: c.outcome, imageUrl: c.imageUrl || null };
     }
   }
 
