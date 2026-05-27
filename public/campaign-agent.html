@@ -87,29 +87,47 @@
   .live-meta strong { color: var(--hx-black); font-weight: 700; }
   .live-url { font-size: 10px; color: var(--hx-blue); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px; }
 
-  /* Outcome strip */
-  .outcomes-section { padding: 12px 14px; background: #fafafa; border-top: 1px solid var(--hx-offwhite); }
-  .outcomes-label { font-size: 10px; font-weight: 800; color: var(--hx-purple); text-transform: uppercase; letter-spacing: .8px; margin-bottom: 8px; }
+  /* Edit button on live preview */
+  .live-preview-label { justify-content: space-between; }
+  .btn-edit { background: none; border: 1px solid #ddd; border-radius: 4px; padding: 2px 8px; font-size: 10px; font-weight: 700; font-family: 'Nunito', sans-serif; color: var(--hx-purple); cursor: pointer; }
+  .btn-edit:hover { background: var(--hx-offwhite); border-color: var(--hx-purple); }
+
+  /* ── Upcoming ── */
+  .upcoming-list { display: flex; flex-direction: column; gap: 12px; }
+  .upcoming-card { background: var(--hx-white); border: 1px solid #e0dde5; border-radius: 10px; border-left: 4px solid var(--hx-orange); overflow: hidden; }
+  .upcoming-card-header { display: flex; align-items: flex-start; gap: 14px; padding: 12px 16px; }
+  .upcoming-time { font-size: 13px; font-weight: 800; color: var(--hx-orange); white-space: nowrap; padding-top: 2px; }
+  .upcoming-detail { flex: 1; min-width: 0; }
+  .upcoming-name { font-size: 13px; font-weight: 700; color: var(--hx-black); }
+  .upcoming-products { font-size: 11px; color: #888; margin-top: 3px; }
+  .upcoming-outcomes { border-top: 1px solid var(--hx-offwhite); padding: 10px 16px; background: #fafafa; }
+  .upcoming-outcomes-label { font-size: 10px; font-weight: 800; color: var(--hx-purple); text-transform: uppercase; letter-spacing: .8px; margin-bottom: 8px; }
   .outcomes-strip { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; }
   .outcomes-strip::-webkit-scrollbar { height: 3px; }
   .outcomes-strip::-webkit-scrollbar-thumb { background: #ddd; border-radius: 2px; }
-  .outcome-card { flex-shrink: 0; width: 120px; border-radius: 7px; overflow: hidden; border: 2px solid #e0dde5; background: var(--hx-white); cursor: default; transition: border-color .15s; }
-  .outcome-card.is-active { border-color: var(--hx-green); }
-  .outcome-card.is-active .outcome-label { background: var(--hx-green); color: #fff; }
+  .outcome-card { flex-shrink: 0; width: 130px; border-radius: 7px; overflow: hidden; border: 1px solid #e0dde5; background: var(--hx-white); }
   .outcome-img-wrap { width: 100%; aspect-ratio: 16/9; background: var(--hx-offwhite); overflow: hidden; display: flex; align-items: center; justify-content: center; }
   .outcome-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .outcome-img-placeholder { color: #ccc; font-size: 16px; }
-  .outcome-label { padding: 4px 6px; font-size: 10px; font-weight: 800; color: var(--hx-black); background: var(--hx-offwhite); display: flex; align-items: center; justify-content: space-between; gap: 4px; }
-  .outcome-active-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--hx-green); flex-shrink: 0; }
-  .outcomes-pending { font-size: 11px; color: #aaa; font-style: italic; padding: 4px 0; }
+  .outcome-lbl { padding: 4px 6px; font-size: 10px; font-weight: 800; color: var(--hx-black); background: var(--hx-offwhite); }
+  .outcomes-pending { font-size: 11px; color: #aaa; font-style: italic; }
 
-  /* ── Upcoming ── */
-  .upcoming-list { display: flex; flex-direction: column; gap: 8px; }
-  .upcoming-card { background: var(--hx-white); border: 1px solid #e0dde5; border-radius: 8px; padding: 12px 16px; border-left: 4px solid var(--hx-orange); display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
-  .upcoming-time { font-size: 13px; font-weight: 800; color: var(--hx-orange); white-space: nowrap; }
-  .upcoming-detail { flex: 1; min-width: 0; }
-  .upcoming-name { font-size: 13px; font-weight: 700; color: var(--hx-black); }
-  .upcoming-meta { font-size: 12px; color: #888; margin-top: 2px; }
+  /* ── Edit modal ── */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(35,35,35,.55); display: flex; align-items: center; justify-content: center; z-index: 100; }
+  .modal { background: var(--hx-white); border-radius: 14px; padding: 28px; width: 90%; max-width: 520px; border-top: 4px solid var(--hx-yellow); }
+  .modal h2 { font-size: 17px; font-weight: 800; margin-bottom: 4px; color: var(--hx-purple); }
+  .modal-sub { font-size: 12px; color: #888; margin-bottom: 20px; }
+  .form-group { margin-bottom: 14px; }
+  .form-group label { display: block; font-size: 12px; font-weight: 700; margin-bottom: 4px; }
+  .form-group input, .form-group textarea { width: 100%; border: 2px solid #e0dde5; border-radius: 7px; padding: 9px 12px; font-size: 13px; font-family: 'Nunito', sans-serif; }
+  .form-group input:focus, .form-group textarea:focus { outline: none; border-color: var(--hx-purple); }
+  .form-group textarea { resize: vertical; min-height: 56px; }
+  .form-group .current-img { width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 6px; border: 1px solid #e0dde5; margin-bottom: 8px; background: var(--hx-offwhite); }
+  .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 20px; }
+  .btn-cancel { background: var(--hx-offwhite); border: none; border-radius: 6px; padding: 8px 18px; font-size: 13px; font-weight: 700; font-family: 'Nunito', sans-serif; cursor: pointer; color: #666; }
+  .btn-save { background: var(--hx-purple); border: none; border-radius: 6px; padding: 8px 18px; font-size: 13px; font-weight: 700; font-family: 'Nunito', sans-serif; cursor: pointer; color: #fff; }
+  .btn-save:hover { background: var(--hx-purple-light); }
+  .btn-save:disabled { opacity: .5; cursor: not-allowed; }
   .empty-state { text-align: center; padding: 20px; color: #aaa; font-size: 13px; background: var(--hx-white); border: 1px dashed #ddd; border-radius: 8px; }
 
   /* ── Activity log ── */
@@ -128,6 +146,7 @@
   .toast { position: fixed; bottom: 20px; right: 20px; background: var(--hx-green); color: #fff; padding: 12px 20px; border-radius: 8px; font-size: 14px; font-weight: 700; font-family: 'Nunito', sans-serif; z-index: 200; opacity: 0; transition: opacity .3s; pointer-events: none; }
   .toast.show { opacity: 1; }
   .refresh-note { font-size: 11px; color: rgba(255,255,255,.4); }
+  .hidden { display: none !important; }
   .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
   @media (max-width: 700px) { .two-col { grid-template-columns: 1fr; } }
 </style>
@@ -203,6 +222,10 @@
     </div>
   </div>
 
+</div>
+
+<div class="modal-overlay hidden" id="editModal" onclick="if(event.target===this)closeEditModal()">
+  <div class="modal" id="modalContent"></div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -303,9 +326,6 @@ function renderProductGrid(data) {
     const label = PRODUCT_LABELS[product] || product;
     const desktopEntry = managed[devices.desktop] || {};
     const mobileEntry  = managed[devices.mobile]  || {};
-    const productOutcomes = outcomePreviews[product] || null;
-
-    // Campaign name from description
     const campaignName = (desktopEntry.description || '').replace(/^\[CIA\]\s*/, '').split(' — ')[0] || 'No active campaign';
 
     return `
@@ -317,15 +337,9 @@ function renderProductGrid(data) {
           </div>
           <span class="cia-badge">CIA</span>
         </div>
-
         <div class="live-previews">
           ${livePreviewPanel('🖥', 'Desktop', devices.desktop, desktopEntry)}
           ${livePreviewPanel('📱', 'Mobile',  devices.mobile,  mobileEntry)}
-        </div>
-
-        <div class="outcomes-section">
-          <div class="outcomes-label">Possible outcomes</div>
-          ${renderOutcomeStrip(productOutcomes)}
         </div>
       </div>`;
   }).join('');
@@ -336,10 +350,15 @@ function livePreviewPanel(icon, label, id, entry) {
   const outcome = (entry.description || '').replace(/^\[CIA\]\s*/, '').split(' — ')[1] || '';
   const ago = entry.updatedAt ? timeAgo(entry.updatedAt) : '—';
   const imgSrc = imgixThumb(url, 480, 270);
+  const safeId = esc(id);
+  const safeUrl = esc(url);
 
   return `
     <div class="live-preview">
-      <div class="live-preview-label">${icon} ${label} <span class="live-badge">LIVE</span></div>
+      <div class="live-preview-label">
+        <span>${icon} ${label} <span class="live-badge">LIVE</span></span>
+        <button class="btn-edit" onclick="openEditModal('${safeId}', '${safeUrl}', '${esc(label)}')">Edit</button>
+      </div>
       <div class="live-img-wrap">
         ${imgSrc
           ? `<img src="${esc(imgSrc)}" alt="${esc(label)} live banner" onerror="this.parentElement.innerHTML='<div class=live-img-placeholder><span>🖼</span>No image</div>'">`
@@ -348,39 +367,6 @@ function livePreviewPanel(icon, label, id, entry) {
       <div class="live-meta">${outcome ? `<strong>${esc(outcome)}</strong> · ` : ''}${ago}</div>
       <div class="live-url" title="${esc(url)}">${esc(url) || '—'}</div>
     </div>`;
-}
-
-function renderOutcomeStrip(productOutcomes) {
-  if (productOutcomes === null) {
-    return `<div class="outcomes-pending">No active campaign — outcomes will appear here when one goes live.</div>`;
-  }
-
-  if (!productOutcomes) {
-    return `<div class="outcomes-pending">Awaiting outcome data from Pick — add <code>/api/agent/outcome-previews</code> to enable this.</div>`;
-  }
-
-  const outcomes = productOutcomes.outcomes || [];
-  if (!outcomes.length) {
-    return `<div class="outcomes-pending">No outcomes configured for this campaign.</div>`;
-  }
-
-  return `<div class="outcomes-strip">` +
-    outcomes.map(o => {
-      const imgSrc = imgixThumb(o.desktop?.imageUrl || '', 240, 135);
-      return `
-        <div class="outcome-card${o.isActive ? ' is-active' : ''}">
-          <div class="outcome-img-wrap">
-            ${imgSrc
-              ? `<img src="${esc(imgSrc)}" alt="${esc(o.label)}" onerror="this.parentElement.innerHTML='<div class=outcome-img-placeholder>🖼</div>'">`
-              : `<div class="outcome-img-placeholder">🖼</div>`}
-          </div>
-          <div class="outcome-label">
-            <span>${esc(o.label)}</span>
-            ${o.isActive ? '<span class="outcome-active-dot"></span>' : ''}
-          </div>
-        </div>`;
-    }).join('') +
-  `</div>`;
 }
 
 function imgixThumb(url, w, h) {
@@ -394,14 +380,60 @@ function renderUpcoming(campaigns) {
     wrap.innerHTML = '<div class="empty-state">No campaigns scheduled in the next 48 hours.</div>';
     return;
   }
-  wrap.innerHTML = campaigns.map(c => `
-    <div class="upcoming-card">
-      <div class="upcoming-time">${c.startsAt ? fmtDate(c.startsAt) : '—'}</div>
-      <div class="upcoming-detail">
-        <div class="upcoming-name">${esc(c.campaignName || 'Untitled campaign')}</div>
-        <div class="upcoming-meta">${esc(PRODUCT_LABELS[c.product] || c.product)} · ${esc(c.device)} · ${esc(c.outcome || '—')}</div>
-      </div>
-    </div>`).join('');
+
+  // Group by campaign name + start time
+  const groups = {};
+  for (const c of campaigns) {
+    const key = `${c.campaignName}||${c.startsAt}`;
+    if (!groups[key]) {
+      groups[key] = { campaignName: c.campaignName, startsAt: c.startsAt, products: new Set(), outcomes: {} };
+    }
+    groups[key].products.add(c.product);
+    // Collect unique outcomes with their image (desktop preferred)
+    const oKey = c.outcome || 'fallback';
+    if (!groups[key].outcomes[oKey]) {
+      groups[key].outcomes[oKey] = { label: c.outcome, imageUrl: c.device === 'desktop' ? c.imageUrl : null };
+    } else if (c.device === 'desktop' && c.imageUrl) {
+      groups[key].outcomes[oKey].imageUrl = c.imageUrl;
+    }
+  }
+
+  wrap.innerHTML = Object.values(groups).map(g => {
+    const productLabels = [...g.products].map(p => PRODUCT_LABELS[p] || p).join(', ');
+    const outcomeList = Object.values(g.outcomes);
+
+    const outcomeHtml = outcomeList.length
+      ? `<div class="outcomes-strip">` +
+          outcomeList.map(o => {
+            const imgSrc = imgixThumb(o.imageUrl || '', 240, 135);
+            return `
+              <div class="outcome-card">
+                <div class="outcome-img-wrap">
+                  ${imgSrc
+                    ? `<img src="${esc(imgSrc)}" alt="${esc(o.label)}" onerror="this.parentElement.innerHTML='<div class=outcome-img-placeholder>🖼</div>'">`
+                    : `<div class="outcome-img-placeholder">🖼</div>`}
+                </div>
+                <div class="outcome-lbl">${esc(o.label || '—')}</div>
+              </div>`;
+          }).join('') +
+        `</div>`
+      : `<div class="outcomes-pending">No outcome images yet — update Pick's /api/agent/upcoming to include outcome images.</div>`;
+
+    return `
+      <div class="upcoming-card">
+        <div class="upcoming-card-header">
+          <div class="upcoming-time">${g.startsAt ? fmtDate(g.startsAt) : '—'}</div>
+          <div class="upcoming-detail">
+            <div class="upcoming-name">${esc(g.campaignName || 'Untitled')}</div>
+            <div class="upcoming-products">${esc(productLabels)}</div>
+          </div>
+        </div>
+        <div class="upcoming-outcomes">
+          <div class="upcoming-outcomes-label">Possible outcomes</div>
+          ${outcomeHtml}
+        </div>
+      </div>`;
+  }).join('');
 }
 
 function renderLog(log) {
@@ -416,6 +448,64 @@ function renderLog(log) {
       <span class="log-level ${entry.level}">${entry.level.toUpperCase()}</span>
       <span class="log-msg">${esc(entry.message)}${entry.detail ? ' <span style="opacity:.5">· ' + esc(entry.detail.campaign || '') + (entry.detail.device ? ' ' + entry.detail.device : '') + '</span>' : ''}</span>
     </div>`).join('');
+}
+
+// ── Edit modal ────────────────────────────────────────────────
+
+let editingId = null;
+
+function openEditModal(id, currentUrl, label) {
+  editingId = id;
+  const imgSrc = imgixThumb(currentUrl, 480, 270);
+  el('modalContent').innerHTML = `
+    <h2>Edit ${esc(label)} banner</h2>
+    <div class="modal-sub">${esc(id)}</div>
+    ${imgSrc ? `<img class="current-img form-group" src="${esc(imgSrc)}" alt="current" onerror="this.style.display='none'">` : ''}
+    <div class="form-group">
+      <label>New image URL</label>
+      <input id="editUrl" type="url" value="${esc(currentUrl)}" placeholder="https://holidayextras.imgix.net/...">
+    </div>
+    <div class="form-group">
+      <label>Reason for change</label>
+      <textarea id="editNote" placeholder="e.g. Overriding campaign banner for launch day"></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeEditModal()">Cancel</button>
+      <button class="btn-save" id="saveBtn" onclick="saveEdit()">Save</button>
+    </div>`;
+  el('editModal').classList.remove('hidden');
+}
+
+function closeEditModal() {
+  el('editModal').classList.add('hidden');
+  editingId = null;
+}
+
+async function saveEdit() {
+  const url = el('editUrl').value.trim();
+  const note = el('editNote').value.trim();
+  if (!url) { showToast('URL is required', true); return; }
+
+  const btn = el('saveBtn');
+  btn.disabled = true;
+  btn.textContent = 'Saving…';
+
+  try {
+    const res = await fetch(`${BASE}/api/redirects/${editingId}`, {
+      method: 'PUT',
+      headers: headers(),
+      body: JSON.stringify({ targetUrl: url, note: note || 'Manual override via Campaign Agent', updatedBy: 'campaign-agent-manual' }),
+    });
+    if (!res.ok) { const e = await res.json(); showToast(e.error || 'Save failed', true); return; }
+    closeEditModal();
+    showToast('Banner updated');
+    load();
+  } catch (e) {
+    showToast('Error: ' + e.message, true);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Save';
+  }
 }
 
 function scheduleAutoRefresh(intervalMs) {
