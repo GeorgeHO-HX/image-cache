@@ -25,6 +25,8 @@ router.get('/health', (_req, res) => {
 });
 
 router.get('/admin', requireAuth, (_req, res) => {
+  res.set('Cache-Control', 'private, no-store');
+  res.set('CDN-Cache-Control', 'no-store');
   res.sendFile(path.join(__dirname, 'public', 'admin.html'));
 });
 
@@ -58,20 +60,28 @@ router.post('/api/agent/cron-sync', async (req, res) => {
 
 // ── Admin API ──────────────────────────────────────────────
 
-router.get('/api/redirects', requireAuth, async (_req, res) => {
+function noCache(_req, res, next) {
+  res.set('Cache-Control', 'private, no-store');
+  res.set('CDN-Cache-Control', 'no-store');
+  res.set('Surrogate-Control', 'no-store');
+  next();
+}
+
+router.get('/api/redirects', requireAuth, noCache, async (_req, res) => {
   res.json(await store.getAll());
 });
 
-router.get('/api/redirects/:id', requireAuth, async (req, res) => {
+router.get('/api/redirects/:id', requireAuth, noCache, async (req, res) => {
   const r = await store.get(req.params.id);
   if (!r) return res.status(404).json({ error: 'Not found' });
   res.json(r);
 });
 
-router.post('/api/redirects', requireAuth, async (req, res) => {
-  const { id, path: rPath, targetUrl, description, group } = req.body;
-  if (!id || !rPath || !targetUrl) {
-    return res.status(400).json({ error: 'id, path, and targetUrl are required' });
+router.post('/api/redirects', requireAuth, noCache, async (req, res) => {
+  const { path: rPath, targetUrl, description, group } = req.body;
+  const id = req.body.id || rPath.replace(/^\//, '').replace(/\//g, '-');
+  if (!rPath || !targetUrl) {
+    return res.status(400).json({ error: 'path and targetUrl are required' });
   }
   if (await store.get(id)) {
     return res.status(409).json({ error: 'Redirect with this id already exists' });
@@ -81,7 +91,7 @@ router.post('/api/redirects', requireAuth, async (req, res) => {
   res.status(201).json(r);
 });
 
-router.put('/api/redirects/:id', requireAuth, async (req, res) => {
+router.put('/api/redirects/:id', requireAuth, noCache, async (req, res) => {
   const { targetUrl, description, note } = req.body;
   const user = req.body.user || req.query.user || 'admin';
   const r = await store.update(req.params.id, { targetUrl, description, note, updatedBy: user });
@@ -89,14 +99,14 @@ router.put('/api/redirects/:id', requireAuth, async (req, res) => {
   res.json(r);
 });
 
-router.post('/api/redirects/:id/rollback/:index', requireAuth, async (req, res) => {
+router.post('/api/redirects/:id/rollback/:index', requireAuth, noCache, async (req, res) => {
   const user = req.body.user || req.query.user || 'admin';
   const r = await store.rollback(req.params.id, parseInt(req.params.index, 10), user);
   if (!r) return res.status(404).json({ error: 'Not found or invalid history index' });
   res.json(r);
 });
 
-router.delete('/api/redirects/:id', requireAuth, async (req, res) => {
+router.delete('/api/redirects/:id', requireAuth, noCache, async (req, res) => {
   await store.remove(req.params.id);
   res.status(204).end();
 });
@@ -123,7 +133,10 @@ router.get('/manifest.json', async (_req, res) => {
 
 router.get('*', async (req, res) => {
   const r = await store.getByPath(req.path);
-  if (!r) return res.status(404).json({ error: 'Not found' });
+  if (!r) {
+    res.set('Cache-Control', 'no-store');
+    return res.status(404).json({ error: 'Not found' });
+  }
 
   res.set('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
   res.redirect(302, r.targetUrl);

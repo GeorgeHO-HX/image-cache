@@ -88,8 +88,19 @@
 
   .toast { position: fixed; bottom: 20px; right: 20px; background: var(--hx-green); color: #fff; padding: 12px 20px; border-radius: 8px; font-size: 14px; font-weight: 700; font-family: 'Nunito', sans-serif; z-index: 200; opacity: 0; transition: opacity .3s; pointer-events: none; }
   .toast.show { opacity: 1; }
+  .search-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+  .search-bar input { flex: 1; border: 2px solid #e0dde5; border-radius: 8px; padding: 10px 14px; font-size: 14px; font-family: 'Nunito', sans-serif; transition: border-color .15s; }
+  .search-bar input:focus { outline: none; border-color: var(--hx-purple); }
+  .search-count { font-size: 13px; color: #888; white-space: nowrap; }
   .empty { text-align: center; padding: 60px 20px; color: #999; font-size: 15px; }
   .hidden { display: none !important; }
+
+  .info-banner { background: #f0ecf7; border: 1px solid #d6cce8; border-radius: 10px; padding: 16px 20px; margin-bottom: 20px; font-size: 13px; line-height: 1.7; color: var(--hx-black); }
+  .info-banner summary { font-weight: 700; color: var(--hx-purple); cursor: pointer; font-size: 14px; }
+  .info-banner summary:hover { color: var(--hx-purple-light); }
+  .info-banner h4 { font-size: 13px; font-weight: 700; color: var(--hx-purple); margin: 12px 0 4px; }
+  .info-banner p { margin: 4px 0; }
+  .info-banner code { background: rgba(84,46,145,.08); padding: 1px 5px; border-radius: 4px; font-size: 12px; }
 </style>
 </head>
 <body>
@@ -106,6 +117,20 @@
   </div>
 </div>
 <div class="container content">
+  <details class="info-banner">
+    <summary>How long do changes take to go live?</summary>
+    <h4>Redirect URLs <code>/image-cache/...</code></h4>
+    <p>Cached for <strong>60 seconds</strong>. After you save a change here, visitors will start seeing the new image within about a minute. During the next 5 minutes, browsers may briefly serve the old image while fetching the new one in the background.</p>
+    <h4>Final images (IMGIX)</h4>
+    <p>Cached for <strong>60 days</strong> by IMGIX. This doesn't affect rollout speed because each campaign uses a unique image URL. When you change the redirect target, the new URL points to a different image file entirely.</p>
+    <h4>In short</h4>
+    <p>After saving, all visitors will see the new image within <strong>~1 minute</strong>, worst case ~6 minutes. No cache purging or deploys needed.</p>
+  </details>
+
+  <div class="search-bar">
+    <input type="text" id="searchInput" placeholder="Search redirects..." oninput="onSearch()">
+    <span class="search-count" id="searchCount"></span>
+  </div>
   <div id="list"></div>
   <div class="empty hidden" id="empty">No redirects configured yet.</div>
 </div>
@@ -126,6 +151,10 @@ function headers() {
   return { 'Content-Type': 'application/json', 'X-Admin-Token': TOKEN };
 }
 
+function fetchOpts(extra = {}) {
+  return { headers: headers(), cache: 'no-store', ...extra };
+}
+
 function getUser() {
   const el = document.getElementById('userEmail');
   const v = el.value.trim();
@@ -133,19 +162,92 @@ function getUser() {
   return v || 'admin';
 }
 
-document.getElementById('userEmail').value = localStorage.getItem('ic_user') || '';
-
-async function load() {
-  const res = await fetch(API, { headers: headers() });
-  if (!res.ok) { alert('Failed to load: ' + res.status); return; }
-  const data = await res.json();
-  render(data);
+function initUser() {
+  const saved = localStorage.getItem('ic_user');
+  if (saved) {
+    document.getElementById('userEmail').value = saved;
+    return true;
+  }
+  return false;
 }
 
-function render(data) {
+function showWelcome() {
+  document.getElementById('modalContent').innerHTML = `
+    <h2>Welcome</h2>
+    <form onsubmit="saveWelcome(event)">
+      <div class="form-group">
+        <label>Your email address</label>
+        <input name="email" type="email" required placeholder="your.name@holidayextras.com" autofocus>
+        <small>So we know who made each change.</small>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-purple">Get started</button>
+      </div>
+    </form>`;
+  document.getElementById('modal').classList.remove('hidden');
+}
+
+function saveWelcome(e) {
+  e.preventDefault();
+  const email = new FormData(e.target).get('email').trim();
+  if (!email) return;
+  localStorage.setItem('ic_user', email);
+  document.getElementById('userEmail').value = email;
+  closeModal();
+}
+
+const PAGE_SIZE = 20;
+let allData = {};
+
+async function load() {
+  const res = await fetch(API, fetchOpts());
+  if (!res.ok) { alert('Failed to load: ' + res.status); return; }
+  allData = await res.json();
+  renderFiltered();
+}
+
+function onSearch() {
+  renderFiltered();
+}
+
+function renderFiltered() {
+  const query = (document.getElementById('searchInput').value || '').toLowerCase().trim();
+  const entries = Object.entries(allData);
+  const total = entries.length;
+
+  let filtered;
+  if (query) {
+    filtered = entries.filter(([id, r]) =>
+      r.path.toLowerCase().includes(query) ||
+      (r.description || '').toLowerCase().includes(query) ||
+      (r.group || '').toLowerCase().includes(query) ||
+      r.targetUrl.toLowerCase().includes(query) ||
+      id.toLowerCase().includes(query)
+    );
+  } else {
+    filtered = entries
+      .sort((a, b) => new Date(b[1].updatedAt) - new Date(a[1].updatedAt))
+      .slice(0, PAGE_SIZE);
+  }
+
+  const countEl = document.getElementById('searchCount');
+  if (query) {
+    countEl.textContent = `${filtered.length} of ${total} redirects`;
+  } else {
+    countEl.textContent = total > PAGE_SIZE ? `Latest ${PAGE_SIZE} of ${total} — search to find more` : `${total} redirects`;
+  }
+
+  render(filtered);
+}
+
+function render(entries) {
   const list = document.getElementById('list');
-  const entries = Object.entries(data);
-  if (!entries.length) { list.innerHTML = ''; document.getElementById('empty').classList.remove('hidden'); return; }
+  if (!entries.length) {
+    list.innerHTML = '';
+    document.getElementById('empty').classList.remove('hidden');
+    document.getElementById('empty').textContent = document.getElementById('searchInput').value ? 'No matches.' : 'No redirects configured yet.';
+    return;
+  }
   document.getElementById('empty').classList.add('hidden');
 
   const groups = {};
@@ -167,19 +269,14 @@ function render(data) {
 
 function renderCard(item) {
   const ago = timeAgo(item.updatedAt);
+  const isImage = item.targetUrl.match(/\.(jpg|jpeg|png|avif|webp|gif)(\?|$)/i);
+  const previewUrl = isImage ? item.targetUrl : '';
   const isCIA = item.group === 'campaign-image-agent' || item.updatedBy === 'campaign-image-agent';
-  const previewUrl = item.targetUrl.match(/\.(jpg|jpeg|png|avif|webp|gif)/i)
-    ? item.targetUrl + (item.targetUrl.includes('?') ? '&' : '?') + 'w=240&h=136&fit=crop'
-    : '';
   return `
     <div class="card${isCIA ? ' cia-managed' : ''}" id="card-${item.id}">
       <div class="card-row">
         <div class="card-info">
-          <div class="card-path">
-            ${esc(item.path)}
-            <button class="btn-copy" onclick="copyUrl('${esc(item.path)}')" title="Copy public URL">Copy URL</button>
-            ${isCIA ? '<span class="badge-cia">&#x1F916; Campaign Agent</span>' : ''}
-          </div>
+          <div class="card-path">${esc(item.path)} <button class="btn-copy" onclick="copyUrl('${esc(item.path)}')" title="Copy public URL">Copy URL</button>${isCIA ? '<span class="badge-cia">&#x1F916; Campaign Agent</span>' : ''}</div>
           <div class="card-target">${esc(item.targetUrl)}</div>
           <div class="card-meta">${esc(item.description)} &middot; ${ago} by ${esc(item.updatedBy)}</div>
           ${isCIA ? '<div class="cia-lock">Automatically managed by Campaign Image Agent — manual edits will be overwritten on next sync</div>' : ''}
@@ -224,17 +321,21 @@ function toggleHistory(id) {
   el.classList.toggle('hidden');
 }
 
+function getExistingGroups() {
+  const groups = new Set();
+  document.querySelectorAll('.group-heading').forEach(el => groups.add(el.textContent));
+  return [...groups];
+}
+
 function showCreateModal() {
+  const groupOptions = getExistingGroups().map(g => `<option value="${esc(g)}">`).join('');
   document.getElementById('modalContent').innerHTML = `
     <h2>New Redirect</h2>
     <form onsubmit="createRedirect(event)">
       <div class="form-group">
-        <label>ID (slug)</label>
-        <input name="id" required placeholder="e.g. parking-hero-wide">
-      </div>
-      <div class="form-group">
         <label>Path</label>
         <input name="path" required placeholder="e.g. /parking/hero-wide">
+        <small>The stable URL path. ID is generated automatically from this.</small>
       </div>
       <div class="form-group">
         <label>Target URL</label>
@@ -246,7 +347,8 @@ function showCreateModal() {
       </div>
       <div class="form-group">
         <label>Group</label>
-        <input name="group" placeholder="e.g. parking-hero">
+        <input name="group" list="groupList" placeholder="e.g. parking-hero">
+        <datalist id="groupList">${groupOptions}</datalist>
         <small>Redirects with the same group are displayed together.</small>
       </div>
       <div class="form-actions">
@@ -258,7 +360,7 @@ function showCreateModal() {
 }
 
 function showEditModal(id) {
-  fetch(API + '/' + id, { headers: headers() }).then(r => r.json()).then(item => {
+  fetch(API + '/' + id, fetchOpts()).then(r => r.json()).then(item => {
     document.getElementById('modalContent').innerHTML = `
       <h2>Edit: ${esc(item.path)}</h2>
       <form onsubmit="updateRedirect(event, '${id}')">
@@ -286,8 +388,8 @@ function showEditModal(id) {
 async function createRedirect(e) {
   e.preventDefault();
   const f = new FormData(e.target);
-  const body = { id: f.get('id'), path: f.get('path'), targetUrl: f.get('targetUrl'), description: f.get('description'), group: f.get('group'), user: getUser() };
-  const res = await fetch(API, { method: 'POST', headers: headers(), body: JSON.stringify(body) });
+  const body = { path: f.get('path'), targetUrl: f.get('targetUrl'), description: f.get('description'), group: f.get('group'), user: getUser() };
+  const res = await fetch(API, fetchOpts({ method: 'POST', body: JSON.stringify(body) }));
   if (!res.ok) { const err = await res.json(); alert(err.error); return; }
   closeModal();
   toast('Redirect created');
@@ -298,7 +400,7 @@ async function updateRedirect(e, id) {
   e.preventDefault();
   const f = new FormData(e.target);
   const body = { targetUrl: f.get('targetUrl'), description: f.get('description'), note: f.get('note'), user: getUser() };
-  const res = await fetch(API + '/' + id, { method: 'PUT', headers: headers(), body: JSON.stringify(body) });
+  const res = await fetch(API + '/' + id, fetchOpts({ method: 'PUT', body: JSON.stringify(body) }));
   if (!res.ok) { const err = await res.json(); alert(err.error); return; }
   closeModal();
   toast('Redirect updated');
@@ -307,9 +409,9 @@ async function updateRedirect(e, id) {
 
 async function rollback(id, index) {
   if (!confirm('Roll back to this version?')) return;
-  const res = await fetch(API + '/' + id + '/rollback/' + index, {
-    method: 'POST', headers: headers(), body: JSON.stringify({ user: getUser() })
-  });
+  const res = await fetch(API + '/' + id + '/rollback/' + index, fetchOpts({
+    method: 'POST', body: JSON.stringify({ user: getUser() })
+  }));
   if (!res.ok) { alert('Rollback failed'); return; }
   toast('Rolled back');
   load();
@@ -317,7 +419,7 @@ async function rollback(id, index) {
 
 async function deleteRedirect(id) {
   if (!confirm('Delete this redirect? This cannot be undone.')) return;
-  await fetch(API + '/' + id, { method: 'DELETE', headers: headers() });
+  await fetch(API + '/' + id, fetchOpts({ method: 'DELETE' }));
   toast('Deleted');
   load();
 }
@@ -350,6 +452,7 @@ function esc(s) {
   return d.innerHTML;
 }
 
+if (!initUser()) showWelcome();
 load();
 </script>
 </body>
