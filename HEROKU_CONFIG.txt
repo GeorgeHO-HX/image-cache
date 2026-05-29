@@ -1,0 +1,31 @@
+Heroku Config Vars — Campaign Image Agent
+==========================================
+Set these in the Heroku dashboard under:
+Settings → Config Vars → Reveal Config Vars
+
+PICK_API_URL=https://hx-p-i-c-k.vercel.app
+PICK_AGENT_SECRET=hx-pick-agent-8k4m2x9p7
+AGENT_SYNC_INTERVAL=60000
+CRON_SECRET=de500865b77109af8d0d481dc23d77eed3a6825b97dcac23243c793e832f6ac9
+
+==========================================
+Notes:
+
+PICK_API_URL
+  Base URL of the P.I.C.K. application.
+
+PICK_AGENT_SECRET
+  Bearer token for authenticating with P.I.C.K.'s /api/agent/* endpoints.
+
+AGENT_SYNC_INTERVAL
+  How often the agent polls P.I.C.K. in milliseconds.
+  60000 = every 60 seconds.
+  On Heroku this is driven by setInterval — no external cron needed.
+
+CRON_SECRET
+  Secures the /api/agent/cron-sync endpoint against unauthorised calls.
+  Not required for normal Heroku operation (setInterval handles syncing)
+  but useful if you ever want to trigger a manual sync externally.
+
+==========================================
+DO NOT commit a .env file with these values to a public repository.
