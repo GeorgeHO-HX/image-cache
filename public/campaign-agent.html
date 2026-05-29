@@ -243,16 +243,37 @@ function headers() {
   return { 'Content-Type': 'application/json', 'X-Admin-Token': TOKEN };
 }
 
+// Friendly label overrides — add any custom entry ID prefixes here
 const PRODUCT_LABELS = {
   parking: 'Parking',
   hotels: 'Hotels',
-  hotel_and_parking: 'Hotel & Parking',
+  'hotel-and-parking': 'Hotel & Parking',
   insurance: 'Insurance',
-  car_hire: 'Car Hire',
+  'car-hire': 'Car Hire',
   transfers: 'Transfers',
   lounge: 'Lounge',
-  port_parking: 'Port Parking',
+  'port-parking': 'Port Parking',
 };
+
+// Derive a readable label from an entry ID prefix
+function idToLabel(prefix) {
+  if (PRODUCT_LABELS[prefix]) return PRODUCT_LABELS[prefix];
+  return prefix.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+}
+
+// Group managed entries into products: { "parking": { desktop: {id,entry}, mobile: {id,entry} } }
+function groupManaged(managed) {
+  const groups = {};
+  for (const [id, entry] of Object.entries(managed)) {
+    let prefix, device;
+    if (id.endsWith('-desktop')) { prefix = id.slice(0, -8); device = 'desktop'; }
+    else if (id.endsWith('-mobile')) { prefix = id.slice(0, -7); device = 'mobile'; }
+    else { prefix = id; device = 'other'; }
+    if (!groups[prefix]) groups[prefix] = {};
+    groups[prefix][device] = { id, entry };
+  }
+  return groups;
+}
 
 let autoRefreshTimer = null;
 
@@ -317,20 +338,22 @@ function renderStatus(data) {
 
 function renderProductGrid(data) {
   const managed = data.managed || {};
-  const productMap = data.productMap || {};
-  const outcomePreviews = data.outcomePreviewsData || {};
   const grid = el('productGrid');
 
-  if (!Object.keys(productMap).length) {
-    grid.innerHTML = '<div class="empty-state">No product map configured.</div>';
+  if (!Object.keys(managed).length) {
+    grid.innerHTML = '<div class="empty-state">No managed entries found. Add redirects with group "campaign-image-agent" to get started.</div>';
     return;
   }
 
-  grid.innerHTML = Object.entries(productMap).map(([product, devices]) => {
-    const label = PRODUCT_LABELS[product] || product;
-    const desktopEntry = managed[devices.desktop] || {};
-    const mobileEntry  = managed[devices.mobile]  || {};
-    const campaignName = (desktopEntry.description || '').replace(/^\[CIA\]\s*/, '').split(' — ')[0] || 'No active campaign';
+  const groups = groupManaged(managed);
+
+  grid.innerHTML = Object.entries(groups).map(([prefix, devices]) => {
+    const label = idToLabel(prefix);
+    const desktopItem = devices.desktop || {};
+    const mobileItem  = devices.mobile  || {};
+    const desktopEntry = desktopItem.entry || {};
+    const mobileEntry  = mobileItem.entry  || {};
+    const campaignName = (desktopEntry.description || mobileEntry.description || '').replace(/^\[CIA\]\s*/, '').split(' — ')[0] || 'No active campaign';
 
     return `
       <div class="product-card">
@@ -342,8 +365,9 @@ function renderProductGrid(data) {
           <span class="cia-badge">CIA</span>
         </div>
         <div class="live-previews">
-          ${livePreviewPanel('🖥', 'Desktop', 'desktop', devices.desktop, desktopEntry)}
-          ${livePreviewPanel('📱', 'Mobile',  'mobile',  devices.mobile,  mobileEntry)}
+          ${desktopItem.id ? livePreviewPanel('🖥', 'Desktop', 'desktop', desktopItem.id, desktopEntry) : ''}
+          ${mobileItem.id  ? livePreviewPanel('📱', 'Mobile',  'mobile',  mobileItem.id,  mobileEntry)  : ''}
+          ${devices.other  ? livePreviewPanel('🔗', label,     'desktop', devices.other.id, devices.other.entry) : ''}
         </div>
       </div>`;
   }).join('');
