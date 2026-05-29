@@ -96,6 +96,18 @@
   .badge-armed { background: var(--hx-orange); color: #fff; font-size: 9px; font-weight: 800; padding: 1px 5px; border-radius: 3px; letter-spacing: .3px; }
   .armed-note { font-size: 10px; color: var(--hx-orange); font-weight: 700; margin-top: 4px; }
 
+  /* Info reveal */
+  .btn-info { background: none; border: 1px solid #ddd; border-radius: 4px; padding: 3px 8px; font-size: 10px; font-weight: 700; font-family: 'Nunito', sans-serif; color: #999; cursor: pointer; flex-shrink: 0; }
+  .btn-info:hover { background: var(--hx-offwhite); border-color: #999; color: var(--hx-black); }
+  .info-reveal { display: none; margin-top: 8px; background: #f8f6ff; border: 1px solid #e0dde5; border-radius: 6px; padding: 8px 10px; }
+  .info-reveal.open { display: block; }
+  .info-row { display: flex; flex-direction: column; gap: 2px; margin-bottom: 7px; }
+  .info-row:last-child { margin-bottom: 0; }
+  .info-label { font-size: 9px; font-weight: 800; color: var(--hx-purple); text-transform: uppercase; letter-spacing: .7px; }
+  .info-value { font-size: 11px; font-weight: 700; color: var(--hx-black); font-family: 'Courier New', monospace; word-break: break-all; }
+  .btn-copy { background: none; border: none; cursor: pointer; font-size: 11px; color: #aaa; padding: 0 4px; vertical-align: middle; }
+  .btn-copy:hover { color: var(--hx-purple); }
+
   /* ── Upcoming ── */
   .upcoming-list { display: flex; flex-direction: column; gap: 12px; }
   .upcoming-card { background: var(--hx-white); border: 1px solid #e0dde5; border-radius: 10px; border-left: 4px solid var(--hx-orange); overflow: hidden; }
@@ -385,12 +397,26 @@ function livePreviewPanel(icon, label, device, id, entry) {
   const imgSrc = imgixThumb(url, tw, th);
   const safeId = esc(id);
   const safeUrl = esc(url);
+  const revealId = 'info-' + id.replace(/[^a-z0-9]/gi, '-');
 
   return `
     <div class="live-preview">
       <div class="live-preview-label">
         <span>${icon} ${label} ${isArmed ? '<span class="badge-armed">ARMED</span>' : '<span class="live-badge">LIVE</span>'}</span>
-        <button class="btn-edit" onclick="openEditModal('${safeId}', '${safeUrl}', '${esc(label)}')">Edit</button>
+        <div style="display:flex;gap:5px">
+          <button class="btn-info" onclick="toggleInfo('${revealId}')">ⓘ Info</button>
+          <button class="btn-edit" onclick="openEditModal('${safeId}', '${safeUrl}', '${esc(label)}')">Edit</button>
+        </div>
+      </div>
+      <div class="info-reveal" id="${revealId}">
+        <div class="info-row">
+          <div class="info-label">Cache Entry ID</div>
+          <div class="info-value">${safeId} <button class="btn-copy" onclick="copyText('${safeId}')" title="Copy">⧉</button></div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">P.I.C.K. Asset Platform Label</div>
+          <div class="info-value">${safeId} <button class="btn-copy" onclick="copyText('${safeId}')" title="Copy">⧉</button></div>
+        </div>
       </div>
       <div class="live-img-wrap ${device}">
         ${imgSrc
@@ -552,6 +578,15 @@ function scheduleAutoRefresh(intervalMs) {
 // ── Helpers ───────────────────────────────────────────────────
 
 function el(id) { return document.getElementById(id); }
+
+function toggleInfo(id) {
+  const panel = document.getElementById(id);
+  if (panel) panel.classList.toggle('open');
+}
+
+function copyText(text) {
+  navigator.clipboard.writeText(text).then(() => showToast('Copied to clipboard'));
+}
 
 function esc(s) {
   if (!s) return '';
